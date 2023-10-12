@@ -23,8 +23,11 @@ lake storage account with the databricks cluster.
 Following article describes in more detail := https://learn.microsoft.com/en-us/azure/databricks/data-governance/credential-passthrough/adls-passthrough
 
 ### 3 layer data transformation using azure databricks service
+Bronze Layer >> Silver Layer >> Gold LAYER
 Data in bronze layer is in parquet format. It is cleaned by converting timestamp column to appropriate data format. This is implemented for all the tables which have columns in timestamp format.
 It is then loaded to silver container in delta table format.
+Data in Gold layer is final and this is the dat which is going to be used for reporting purpose.
 Dataframe is like a temporary view wuth table like structure
+
 
 
