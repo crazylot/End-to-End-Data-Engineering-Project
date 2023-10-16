@@ -22,10 +22,12 @@ Make sure that user which you have login to the databricks service has "Storage 
 lake storage account with the databricks cluster. 
 Following article describes in more detail := https://learn.microsoft.com/en-us/azure/databricks/data-governance/credential-passthrough/adls-passthrough
 
-## Data Transforamtion 
+### Data Transforamtion 
 <img width="407" alt="image" src="https://github.com/crazylot/End-to-End-Data-Engineering-Project/assets/63306186/eb6d61bb-ae0d-4353-8d36-5c06a7767bf8">
 
 I extracted data from Azure Data Lake Storage Gen2 into Azure Databricks, ran transformations on the data in Azure Databricks, and loaded the transformed data into Azure Synapse Analytics.
+
+### Git Integration with Azure Data Factory 
 
 ### 3 layer data cleaning with azure databricks service
 Bronze Layer >> Silver Layer >> Gold LAYER
