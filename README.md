@@ -22,7 +22,10 @@ Make sure that user which you have login to the databricks service has "Storage 
 lake storage account with the databricks cluster. 
 Following article describes in more detail := https://learn.microsoft.com/en-us/azure/databricks/data-governance/credential-passthrough/adls-passthrough
 
-### 3 layer data transformation using azure databricks service
+## Data Transforamtion Arhitecture
+<img width="407" alt="image" src="https://github.com/crazylot/End-to-End-Data-Engineering-Project/assets/63306186/eb6d61bb-ae0d-4353-8d36-5c06a7767bf8">
+
+### 3 layer data cleaning with azure databricks service
 Bronze Layer >> Silver Layer >> Gold LAYER
 Data in bronze layer is in parquet format. It is cleaned by converting timestamp column to appropriate data format. This is implemented for all the tables which have columns in timestamp format.
 It is then loaded to silver container in delta table format.
