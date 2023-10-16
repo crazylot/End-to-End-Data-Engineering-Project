@@ -22,15 +22,20 @@ Make sure that user which you have login to the databricks service has "Storage 
 lake storage account with the databricks cluster. 
 Following article describes in more detail := https://learn.microsoft.com/en-us/azure/databricks/data-governance/credential-passthrough/adls-passthrough
 
-## Data Transforamtion Arhitecture
+## Data Transforamtion 
 <img width="407" alt="image" src="https://github.com/crazylot/End-to-End-Data-Engineering-Project/assets/63306186/eb6d61bb-ae0d-4353-8d36-5c06a7767bf8">
+
+I extracted data from Azure Data Lake Storage Gen2 into Azure Databricks, ran transformations on the data in Azure Databricks, and loaded the transformed data into Azure Synapse Analytics.
 
 ### 3 layer data cleaning with azure databricks service
 Bronze Layer >> Silver Layer >> Gold LAYER
 Data in bronze layer is in parquet format. It is cleaned by converting timestamp column to appropriate data format. This is implemented for all the tables which have columns in timestamp format.
-It is then loaded to silver container in delta table format.
+
+It is then loaded to silver container in delta table format. In Silver layer, I have modified coumn names to include underscore ("_") between 2 words in column name.
+
 Data in Gold layer is final and this is the dat which is going to be used for reporting purpose.
-Dataframe is like a temporary view wuth table like structure
+
+Dataframe is like a temporary view with table like structure.
 
 
 
