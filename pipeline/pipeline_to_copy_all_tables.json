@@ -167,6 +167,93 @@
 					"referenceName": "AzureDatabricksConnectionWithDataFactory",
 					"type": "LinkedServiceReference"
 				}
+			},
+			{
+				"name": "get name for all tables to create view",
+				"description": "get name for all tables for which views to be created",
+				"type": "GetMetadata",
+				"dependsOn": [
+					{
+						"activity": "SilverToGold",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataset": {
+						"referenceName": "goldcontainerdatadataset",
+						"type": "DatasetReference"
+					},
+					"fieldList": [
+						"childItems"
+					],
+					"storeSettings": {
+						"type": "AzureBlobFSReadSettings",
+						"enablePartitionDiscovery": false
+					},
+					"formatSettings": {
+						"type": "BinaryReadSettings"
+					}
+				}
+			},
+			{
+				"name": "For Each table create a view",
+				"description": "loop through all the child items to create a view",
+				"type": "ForEach",
+				"dependsOn": [
+					{
+						"activity": "get name for all tables to create view",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@activity('get name for all tables to create view').output.childItems",
+						"type": "Expression"
+					},
+					"activities": [
+						{
+							"name": "Use Stored procedure to create Views",
+							"type": "SqlServerStoredProcedure",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"storedProcedureName": "[dbo].[create_views_from_tables]",
+								"storedProcedureParameters": {
+									"view_name": {
+										"value": {
+											"value": "@item().name",
+											"type": "Expression"
+										}
+									}
+								}
+							},
+							"linkedServiceName": {
+								"referenceName": "synapse_workspace_001_test_connection",
+								"type": "LinkedServiceReference"
+							}
+						}
+					]
+				}
 			}
 		],
 		"annotations": [],
