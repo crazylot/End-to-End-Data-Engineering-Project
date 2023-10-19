@@ -39,5 +39,8 @@ Data in Gold layer is final and this is the dat which is going to be used for re
 
 Dataframe is like a temporary view with table like structure.
 
+### Azure Synapse Analytics Service
+In order to connect with your serversql pool with azure data factory, you need to create a linked service connection for which type will be "Azure SQL Database" and not "Azure Synapse Analytics Service".
+
 
 
