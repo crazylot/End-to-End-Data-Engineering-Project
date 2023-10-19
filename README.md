@@ -1,6 +1,10 @@
 # End-to-End-Data-Engineering-Project
 A complete End to End Data Engineering Project implemented using Azure Cloud provider. Pipeline are created to ingest data from SQL server database , transformed using azure Databricks service and finally data is stored in azure synapase analytics warehouse. Tableau is used to create report over this data.
 
+# Final Pipeline Look
+<img width="488" alt="image" src="https://github.com/crazylot/End-to-End-Data-Engineering-Project/assets/63306186/2109fb0d-394c-4e7f-bd33-a6edc5339d79">
+
+
 ## Services/Tools Used
 
 ### Azure Databricks
@@ -40,7 +44,8 @@ Data in Gold layer is final and this is the dat which is going to be used for re
 Dataframe is like a temporary view with table like structure.
 
 ### Azure Synapse Analytics Service
-In order to connect with your serversql pool with azure data factory, you need to create a linked service connection for which type will be "Azure SQL Database" and not "Azure Synapse Analytics Service".
+In order to connect with your serversql pool with azure data factory, you need to create a linked service connection for which type will be "Azure SQL Database" and not "Azure Synapse Analytics Service". Serverless SQL Endpoint in the properties of synapse anlaytics workspace will used as server name and databse will be your serverless SQL pool name.
+
 
 
 
