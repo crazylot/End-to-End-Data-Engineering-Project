@@ -17,6 +17,9 @@
 		"AzureSqlDatabase1_connectionString": {
 			"value": ""
 		},
+		"synapse_workspace_001_test_connection_connectionString": {
+			"value": ""
+		},
 		"AzureDataLakeStorage1_properties_typeProperties_url": {
 			"value": "https://store0sales0data.dfs.core.windows.net/"
 		},

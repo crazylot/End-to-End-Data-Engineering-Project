@@ -23,6 +23,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'AzureSqlDatabase1'"
 		},
+		"synapse_workspace_001_test_connection_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'synapse_workspace_001_test_connection'"
+		},
 		"AzureDataLakeStorage1_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://store0sales0data.dfs.core.windows.net/"
@@ -389,6 +393,95 @@
 							"referenceName": "AzureDatabricksConnectionWithDataFactory",
 							"type": "LinkedServiceReference"
 						}
+					},
+					{
+						"name": "get name for all tables to create view",
+						"description": "get name for all tables for which views to be created",
+						"type": "GetMetadata",
+						"dependsOn": [
+							{
+								"activity": "SilverToGold",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataset": {
+								"referenceName": "goldcontainerdatadataset",
+								"type": "DatasetReference",
+								"parameters": {}
+							},
+							"fieldList": [
+								"childItems"
+							],
+							"storeSettings": {
+								"type": "AzureBlobFSReadSettings",
+								"recursive": true,
+								"enablePartitionDiscovery": false
+							},
+							"formatSettings": {
+								"type": "BinaryReadSettings"
+							}
+						}
+					},
+					{
+						"name": "For Each table create a view",
+						"description": "loop through all the child items to create a view",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "get name for all tables to create view",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('get name for all tables to create view').output.childItems",
+								"type": "Expression"
+							},
+							"activities": [
+								{
+									"name": "Use Stored procedure to create Views",
+									"type": "SqlServerStoredProcedure",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "0.12:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"storedProcedureName": "[[dbo].[create_views_from_tables]",
+										"storedProcedureParameters": {
+											"view_name": {
+												"value": {
+													"value": "@item().name",
+													"type": "Expression"
+												}
+											}
+										}
+									},
+									"linkedServiceName": {
+										"referenceName": "synapse_workspace_001_test_connection",
+										"type": "LinkedServiceReference"
+									}
+								}
+							]
+						}
 					}
 				],
 				"policy": {
@@ -400,8 +493,10 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/AzureSQLDatabaseTablesInAdventureWorksDatabase')]",
 				"[concat(variables('factoryId'), '/linkedServices/AzureDatabricksConnectionWithDataFactory')]",
+				"[concat(variables('factoryId'), '/datasets/goldcontainerdatadataset')]",
 				"[concat(variables('factoryId'), '/datasets/AzureSQLtablesCopy')]",
-				"[concat(variables('factoryId'), '/datasets/CopyParquetTables')]"
+				"[concat(variables('factoryId'), '/datasets/CopyParquetTables')]",
+				"[concat(variables('factoryId'), '/linkedServices/synapse_workspace_001_test_connection')]"
 			]
 		},
 		{
@@ -603,6 +698,29 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/goldcontainerdatadataset')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Binary",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "SalesLT",
+						"fileSystem": "gold"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeStorage1')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/AdventureWorksDatabseConnection')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
@@ -660,6 +778,19 @@
 				"type": "AzureSqlDatabase",
 				"typeProperties": {
 					"connectionString": "[parameters('AzureSqlDatabase1_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/synapse_workspace_001_test_connection')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureSqlDatabase",
+				"typeProperties": {
+					"connectionString": "[parameters('synapse_workspace_001_test_connection_connectionString')]"
 				}
 			},
 			"dependsOn": []
