@@ -1,0 +1,21 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"workspaceName": {
+			"value": "synapse-workspace-001-test"
+		},
+		"DataLakeGoldContainerConnection_accountKey": {
+			"value": ""
+		},
+		"synapse-workspace-001-test-WorkspaceDefaultSqlServer_connectionString": {
+			"value": "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=tcp:synapse-workspace-001-test.sql.azuresynapse.net,1433;Initial Catalog=@{linkedService().DBName}"
+		},
+		"DataLakeGoldContainerConnection_properties_typeProperties_url": {
+			"value": "https://store0sales0data.dfs.core.windows.net/"
+		},
+		"synapse-workspace-001-test-WorkspaceDefaultStorage_properties_typeProperties_url": {
+			"value": "https://syanpseusageaccount.dfs.core.windows.net"
+		}
+	}
+}
