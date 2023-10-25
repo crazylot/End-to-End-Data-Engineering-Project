@@ -1,0 +1,17 @@
+{
+	"name": "StoredProcedure",
+	"properties": {
+		"content": {
+			"query": "USE goldcontainerDB\nGO\n\nCREATE OR ALTER PROC create_views_from_tables \n                            @view_name NVARCHAR(100)\nAS \nBEGIN \nDECLARE @statement VARCHAR(MAX)\n\n   SET @statement = N'CREATE OR ALTER VIEW '+ @view_name +' AS\n   SELECT * FROM OPENROWSET(\n        BULK ''https://store0sales0data.dfs.core.windows.net/gold/SalesLT/' + @view_name + '/'',\n        FORMAT = ''DELTA''\n       ) as [result]'\n   EXEC (@statement)\n\nEND\nGO\n\nEXEC create_views_from_tables 'Product'\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "goldcontainerDB",
+				"poolName": "Built-in"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

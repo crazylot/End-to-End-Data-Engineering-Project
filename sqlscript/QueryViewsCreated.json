@@ -1,0 +1,17 @@
+{
+	"name": "QueryViewsCreated",
+	"properties": {
+		"content": {
+			"query": "\n\nSelect * FROM Customer\n\nSelect Count(*) FROM Product\n\n\n\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "goldcontainerDB",
+				"poolName": "Built-in"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

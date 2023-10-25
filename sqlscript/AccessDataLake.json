@@ -1,0 +1,17 @@
+{
+	"name": "AccessDataLake",
+	"properties": {
+		"content": {
+			"query": "SELECT\n    COUNT(*)\nFROM\n    OPENROWSET(\n        BULK 'https://store0sales0data.dfs.core.windows.net/gold/SalesLT/Product/',\n        FORMAT = 'DELTA'\n    ) AS [result] \n\nSELECT\n    COUNT(*)\nFROM\n    OPENROWSET(\n        BULK 'https://store0sales0data.dfs.core.windows.net/silver/SalesLT/Product/',\n        FORMAT = 'DELTA'\n    ) AS [result] \n\nSELECT\n    COUNT(*)\nFROM\n    OPENROWSET(\n        BULK 'https://store0sales0data.dfs.core.windows.net/silver/SalesLT/Product/*',\n        FORMAT = 'PARQUET'\n    ) AS [result] \n\nORDER BY ProductCategoryID ASC",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "goldcontainerDB",
+				"poolName": "Built-in"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}
